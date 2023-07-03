@@ -7,7 +7,7 @@ from langchain.chains import LLMChain
 
 
 
-os.environ['OPENAI_API_KEY'] = apikey
+os.environ['OPENAI_API_KEY'] = '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'
 #APP framework
 st.title('🍛CurryGPT🍛')
 prompt = st.text_input('Type in the curry you want to make and see the magic happen and there is a bonus at the bottom of the answer.')
