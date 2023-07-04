@@ -1,7 +1,10 @@
 import os
+import sys
+print(sys.path)
+
 import streamlit as st
 from langchain.llms import OpenAI
-from apikey import apikey 
+from apikey import apikey
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 
