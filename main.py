@@ -1,22 +1,26 @@
 import os
-import sys
-print(sys.path)
-
 import streamlit as st
 from langchain.llms import OpenAI
-from apikey import apikey
+from apikey import apikey 
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 
 
 
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = apikey
 #APP framework
-st.title('🍛CurryGPT🍛')
+st.title('🍛RecipeGPT🍛')
 prompt = st.text_input('Type in the curry you want to make and see the magic happen and there is a bonus at the bottom of the answer.')
 
 
 #prompt template
+ingredient_template = PromptTemplate(
+  input_variables = ['ingredient'],
+  template = 'list out in bullet points with a line in between the ingredients needed to make {ingredient}'
+  
+)
+
+
 curry_template = PromptTemplate(
   input_variables = ['curry'],
   template = 'write how this {curry} is made step by step'
@@ -36,6 +40,7 @@ video_template = PromptTemplate(
 # make this an llm
 lm = OpenAI(temperature = 0.9)
 
+ingredient_chain = LLMChain(llm = lm, prompt = ingredient_template ,verbose = True)
 spicy_chain = LLMChain(llm = lm,prompt = spicy_template,verbose = True)
 curry_chain = LLMChain(llm = lm,prompt = curry_template, verbose = True)
 video_chain = LLMChain(llm = lm,prompt = video_template, verbose = True)
@@ -44,9 +49,11 @@ video_chain = LLMChain(llm = lm,prompt = video_template, verbose = True)
 if prompt:
   response1 = curry_chain.run(prompt)
   response2 = spicy_chain.run(prompt)
-  response3 = video_chain.run(prompt)
+  
+  response4 = ingredient_chain.run(prompt)
+  st.write('The ingredients to make this dish are:-')
+  st.write(response4)
+  st.write('The steps of preparation')
   st.write(response1)
   st.write('The ingredient that controls the spice level: ')
   st.write(response2)
-  st.write('here is a video to help you make it')
-  st.write(response3)
