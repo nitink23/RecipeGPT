@@ -1,17 +1,10 @@
 import os
 import streamlit as st
 from langchain.llms import OpenAI
-from apikey import apikey
+from dotenv import load_dotenv
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-
-def print_text_animated(text):
-  for char in text:
-    st.write(char, end = '', flush = True)
-    time.sleep(0.02)
-
-
-os.environ['OPENAI_API_KEY'] = apikey
+load_dotenv()
 #APP framework
 st.title('🍛RecipeGPT🍛')
 prompt = st.text_input('Type in the curry you want to make and see the magic happen and there is a bonus at the bottom of the answer.')
@@ -40,7 +33,6 @@ video_template = PromptTemplate(
   template = ' find a youtube video that will help me make {video}'
 )
 
-
 # make this an llm
 lm = OpenAI(temperature = 0.9,max_tokens=400)
 
@@ -52,16 +44,11 @@ video_chain = LLMChain(llm = lm,prompt = video_template, verbose = True)
 
 # gives out a response
 if prompt:
-  
-  
+
 
   response4 = ingredient_chain.run(prompt)
-  
-  
-  
   st.write('The ingredients to make this dish are:-')
   st.write(response4)
- 
   response1 = curry_chain.run(prompt)
   st.write('The steps of preparation')
   st.write(response1)
